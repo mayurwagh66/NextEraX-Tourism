@@ -1,6 +1,6 @@
 'use strict';
 
-const GEMINI_API_KEY = 'AIzaSyDzFCgPZcQDwxApZ175_wztrcVvPgdUNkE'; // provided
+const GEMINI_API_KEY = ; // provided
 const GEMINI_MODEL = 'gemini-1.5-flash';
 
 const form = document.getElementById('planner-form');
