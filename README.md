@@ -1,6 +1,6 @@
 # 🌟 NextEraX - Blockchain-Enabled Tourism Platform
 
-![Jharkhand Tourism](./frontend/public/loader-bg.png)
+Platform : https://frontend-sepia-seven-9wck7zaulp.vercel.app/
 
 Welcome to **NextEraX**! This is a revolutionary blockchain-based platform designed to transform the tourism experience by connecting tourists with verified local guides. Built with a stunning Sky Blue aesthetic and modern interactive UI, NextEraX provides immersive experiences and ensures secure transactions through smart contracts.
 
