@@ -1,0 +1,36 @@
+{
+  "name": "nexterax",
+  "version": "1.0.0",
+  "description": "Blockchain-Enabled Tourist Guide Platform",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx hardhat test",
+    "compile": "npx hardhat compile",
+    "deploy": "npx hardhat run scripts/deploy.js --network sepolia",
+    "deploy:local": "npx hardhat run scripts/deploy.js --network localhost",
+    "node": "npx hardhat node",
+    "frontend": "cd frontend && npm start"
+  },
+  "keywords": [
+    "blockchain",
+    "tourism",
+    "nft",
+    "ethereum",
+    "solidity"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "@nomiclabs/hardhat-etherscan": "^3.1.7",
+    "@openzeppelin/contracts": "^4.9.3",
+    "chai": "^4.3.7",
+    "dotenv": "^16.3.1",
+    "ethers": "^6.7.1",
+    "hardhat": "^2.17.1"
+  },
+  "type": "module",
+  "dependencies": {
+    "aos": "^2.3.4"
+  }
+}

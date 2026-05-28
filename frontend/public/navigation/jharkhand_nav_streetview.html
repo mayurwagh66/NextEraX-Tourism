@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Jharkhand Tourism AR/VR Navigation</title>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    #map {
+      height: 40%;
+      width: 100%;
+    }
+    #pano {
+      height: 60%;
+      width: 100%;
+      position: relative;
+    }
+    /* Arrow design */
+    #arrow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      transform: translate(-50%, -50%) rotate(0deg);
+      pointer-events: none;
+      z-index: 10;
+    }
+    #arrow::before {
+      content: "";
+      display: block;
+      width: 0;
+      height: 0;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-bottom: 30px solid red; /* Arrowhead */
+      margin: 0 auto;
+    }
+    #arrow::after {
+      content: "";
+      display: block;
+      width: 10px;
+      height: 40px;
+      background: red; /* Arrow shaft */
+      margin: 0 auto;
+    }
+    #controls {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      z-index: 20;
+    }
+  </style>
+</head>
+<body>
+  <div id="controls">
+    <label for="destSelect">Select Destination: </label>
+    <select id="destSelect">
+      <option value="23.4710,84.2550">Netarhat</option>
+      <option value="23.8356,84.1988">Betla National Park</option>
+      <option value="23.3756,85.4395">Hundru Falls</option>
+      <option value="23.3176,85.5419">Dassam Falls</option>
+      <option value="23.6166,85.2776">Patratu Valley</option>
+      <option value="24.4826,86.6942">Baidyanath Dham</option>
+      <option value="23.9803,86.1467">Parasnath Hills</option>
+      <option value="23.2883,85.5017">Jonha Falls</option>
+    </select>
+  </div>
+  <div id="map"></div>
+  <div id="pano">
+    <div id="arrow"></div>
+  </div>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBx1YZ2CdtUelCBzgwP6VRudMVR9f_OKyg&libraries=geometry"></script>
+  <script>
+    let map, panorama, arrow, userLocation, destination;
+
+    function initMap() {
+      map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: 23.36, lng: 85.33 },
+        zoom: 7,
+      });
+
+      panorama = new google.maps.StreetViewPanorama(
+        document.getElementById("pano"),
+        {
+          position: { lat: 23.36, lng: 85.33 },
+          pov: { heading: 34, pitch: 10 },
+          visible: true,
+        }
+      );
+
+      map.setStreetView(panorama);
+
+      arrow = document.getElementById("arrow");
+
+      // Get user location
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((pos) => {
+          userLocation = {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+          };
+          map.setCenter(userLocation);
+          new google.maps.Marker({
+            position: userLocation,
+            map: map,
+            label: "You",
+          });
+          panorama.setPosition(userLocation);
+        });
+      }
+
+      document.getElementById("destSelect").addEventListener("change", function() {
+        const [lat, lng] = this.value.split(",").map(Number);
+        destination = { lat, lng };
+
+        new google.maps.Marker({
+          position: destination,
+          map: map,
+          label: "Dest",
+        });
+
+        // Adjust map to fit both
+        const bounds = new google.maps.LatLngBounds();
+        bounds.extend(userLocation);
+        bounds.extend(destination);
+        map.fitBounds(bounds);
+      });
+
+      panorama.addListener("pov_changed", updateArrow);
+    }
+
+    function updateArrow() {
+      if (!destination) return;
+      const pov = panorama.getPov();
+      const panoPos = panorama.getPosition();
+
+      if (!panoPos) return;
+
+      const heading = google.maps.geometry.spherical.computeHeading(
+        panoPos,
+        destination
+      );
+      let angle = heading - pov.heading;
+      angle = (angle + 360) % 360;
+
+      arrow.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+    }
+
+    window.onload = initMap;
+  </script>
+</body>
+</html>

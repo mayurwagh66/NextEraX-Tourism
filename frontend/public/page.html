@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover Jharkhand - The Land of Forests & Waterfalls</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(45, 69, 47, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 0.6rem 0; /* reduced height */
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+        }
+
+        .navbar.scrolled {
+            background: rgba(45, 69, 47, 0.98);
+            padding: 0.4rem 0; /* compact when scrolled */
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #f4f1e8;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 1.25rem; /* tighter spacing */
+        }
+
+        .nav-menu a {
+            color: #f4f1e8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.4rem 0.9rem; /* smaller hit area */
+            border-radius: 20px;
+            font-size: 0.95rem; /* slightly smaller text */
+        }
+
+        .nav-menu a:hover {
+            background: rgba(139, 95, 74, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #8b5f4a, #6b4423) !important;
+            border-radius: 25px !important;
+            padding: 0.5rem 1.5rem !important;
+            margin-left: 1rem;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(135deg, #6b4423, #4a2f18) !important;
+            transform: translateY(-2px) !important;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #f4f1e8;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(45, 69, 47, 0.4), rgba(139, 95, 74, 0.4));
+            z-index: -1;
+        }
+
+        .hero-content {
+            color: white;
+            max-width: 800px;
+            padding: 0 2rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* Search Window Styles */
+        .search-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            margin: 2rem auto;
+        }
+
+        .search-title {
+            font-size: 1.5rem;
+            color: #2d452f;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .search-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .search-input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #8b5f4a;
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, #8b5f4a, #6b4423);
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(139, 95, 74, 0.3);
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(139, 95, 74, 0.4);
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(45, 69, 47, 0.1);
+            color: #2d452f;
+            padding: 0.5rem 1rem;
+            border: 1px solid #2d452f;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: #2d452f;
+            color: white;
+        }
+
+        /* Image Slider Section */
+        .slider-section {
+            padding: 5rem 0;
+            background: #f8f6f0;
+        }
+
+        .slider-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: #2d452f;
+            margin-bottom: 3rem;
+            font-weight: 600;
+        }
+
+        .image-slider {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .slide {
+            display: none;
+            position: relative;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .slide-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            color: white;
+            padding: 2rem;
+            text-align: left;
+        }
+
+        .slide-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(45, 69, 47, 0.8);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-arrow:hover {
+            background: rgba(45, 69, 47, 1);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-arrow.prev {
+            left: 20px;
+        }
+
+        .nav-arrow.next {
+            right: 20px;
+        }
+
+        .slider-dots {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .dot {
+            height: 12px;
+            width: 12px;
+            margin: 0 5px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active, .dot:hover {
+            background-color: #2d452f;
+        }
+
+        /* Content Sections */
+        .intro-section {
+            padding: 5rem 0;
+            background: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .intro-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .intro-content h2 {
+            font-size: 2.5rem;
+            color: #2d452f;
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .intro-content p {
+            font-size: 1.1rem;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        /* Highlights Grid */
+        .highlights-section {
+            padding: 5rem 0;
+            background: #f8f6f0;
+        }
+
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .highlight-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .highlight-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .highlight-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-content h3 {
+            color: #2d452f;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .card-content p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Interactive Features */
+        .interactive-section {
+            padding: 5rem 0;
+            background: white;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .feature-box {
+            background: #f8f6f0;
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 5px solid #8b5f4a;
+        }
+
+        .feature-box h3 {
+            color: #2d452f;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .contact-form, .booking-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-top: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2d452f;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #8b5f4a;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #2d452f, #1a2b1c);
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(45, 69, 47, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background: #2d452f;
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #f4f1e8;
+        }
+
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #f4f1e8;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-icons a {
+            width: 40px;
+            height: 40px;
+            background: #8b5f4a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            background: #6b4423;
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #555;
+            color: #ccc;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background-color: rgba(45, 69, 47, 0.95);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                padding: 2rem 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .nav-arrow {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-container {
+                margin: 2rem 1rem;
+                padding: 1.5rem;
+            }
+
+            .search-input-group {
+                flex-direction: column;
+            }
+
+            .search-input {
+                margin-bottom: 0.5rem;
+            }
+
+            .search-filters {
+                justify-content: center;
+            }
+
+            .login-btn {
+                margin-left: 0 !important;
+                margin-top: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="logo">Jharkhand Tourism</div>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#destinations">Destinations</a></li>
+                <li><a href="#culture">Culture</a></li>
+                <li><a href="#festivals">Festivals</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#plan-trip">Plan Your Trip</a></li> 
+                <li><a href="#login" class="login-btn">Login</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <video class="hero-video" autoplay muted loop>
+            <source src="https://videos.pexels.com/video-files/1851190/1851190-uhd_2560_1440_25fps.mp4" type="video/mp4">
+            <source src="https://videos.pexels.com/video-files/4827/4827-hd_1920_1080_30fps.mp4" type="video/mp4">
+            <!-- Fallback image if video doesn't load -->
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Discover Jharkhand</h1>
+            <p>The Land of Forests & Waterfalls</p>
+            
+            <!-- Search Window -->
+            <div class="search-container">
+                <h3 class="search-title">Find Your Perfect Destination</h3>
+                <form class="search-form" onsubmit="handleSearch(event)">
+                    <div class="search-input-group">
+                        <input type="text" class="search-input" id="search-input" placeholder="Search destinations, attractions, activities..." required>
+                        <button type="submit" class="search-btn">Search</button>
+                    </div>
+                    <div class="search-filters">
+                        <button type="button" class="filter-btn active" onclick="setFilter('all')">All</button>
+                        <button type="button" class="filter-btn" onclick="setFilter('waterfalls')">Waterfalls</button>
+                        <button type="button" class="filter-btn" onclick="setFilter('temples')">Temples</button>
+                        <button type="button" class="filter-btn" onclick="setFilter('wildlife')">Wildlife</button>
+                        <button type="button" class="filter-btn" onclick="setFilter('hills')">Hill Stations</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Image Slider Section -->
+    <section class="slider-section" id="gallery">
+        <div class="slider-container">
+            <h2 class="section-title">Explore Jharkhand's Beauty</h2>
+            <div class="image-slider">
+                <div class="slide active">
+                    <img src="https://images.unsplash.com/photo-1730021155304-9ff1f0f33b29" alt="Temple Architecture">
+                    <div class="slide-content">
+                        <h3 class="slide-title">Baidyanath Dham</h3>
+                        <p>One of the twelve Jyotirlingas, a sacred pilgrimage destination</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1696239107350-b7136e7099d3" alt="Historical Temple">
+                    <div class="slide-content">
+                        <h3 class="slide-title">Ancient Temples</h3>
+                        <p>Rich architectural heritage showcasing centuries of cultural history</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1704036178755-b53e462f7348" alt="Tiger Wildlife">
+                    <div class="slide-content">
+                        <h3 class="slide-title">Betla National Park</h3>
+                        <p>Home to majestic tigers and diverse wildlife in their natural habitat</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1732520524359-d65ff5c3cb69" alt="Spotted Deer">
+                    <div class="slide-content">
+                        <h3 class="slide-title">Wildlife Sanctuary</h3>
+                        <p>Spotted deer roaming freely in Jharkhand's protected forests</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1710125246865-851d06ad7dbc" alt="Deer by Water">
+                    <div class="slide-content">
+                        <h3 class="slide-title">Natural Habitats</h3>
+                        <p>Serene water bodies providing sanctuary for local wildlife</p>
+                    </div>
+                </div>
+                
+                <button class="nav-arrow prev" onclick="changeSlide(-1)">❮</button>
+                <button class="nav-arrow next" onclick="changeSlide(1)">❯</button>
+            </div>
+            
+            <div class="slider-dots">
+                <span class="dot active" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
+                <span class="dot" onclick="currentSlide(4)"></span>
+                <span class="dot" onclick="currentSlide(5)"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Introduction Section -->
+    <section class="intro-section">
+        <div class="container">
+            <div class="intro-content">
+                <h2>Welcome to Jharkhand</h2>
+                <p>Jharkhand, literally meaning "The Land of Forests," is a state blessed with abundant natural beauty, rich mineral resources, and vibrant tribal culture. From cascading waterfalls and dense forests to ancient temples and wildlife sanctuaries, Jharkhand offers an enchanting blend of nature, spirituality, and adventure. Experience the pristine beauty of Netarhat, the wildlife diversity of Betla National Park, the spiritual aura of Baidyanath Dham, and the thundering magnificence of Hundru Falls.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Highlights Section -->
+    <section class="highlights-section" id="destinations">
+        <div class="container">
+            <h2 class="section-title">Top Destinations</h2>
+            <div class="highlights-grid">
+                <div class="highlight-card">
+                    <img src="https://images.unsplash.com/photo-1587491618720-c79922211e02" alt="Hundru Falls">
+                    <div class="card-content">
+                        <h3>Hundru Falls</h3>
+                        <p>A spectacular 98-meter waterfall formed by the Subarnarekha River, offering breathtaking views and a refreshing retreat in nature's lap.</p>
+                    </div>
+                </div>
+                <div class="highlight-card">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4" alt="Netarhat">
+                    <div class="card-content">
+                        <h3>Netarhat Hill Station</h3>
+                        <p>Known as the "Queen of Chotanagpur," this hill station offers stunning sunrise and sunset views with pleasant weather year-round.</p>
+                    </div>
+                </div>
+                <div class="highlight-card">
+                    <img src="https://images.unsplash.com/photo-1704036178755-b53e462f7348" alt="Betla National Park">
+                    <div class="card-content">
+                        <h3>Betla National Park</h3>
+                        <p>One of India's first tiger reserves, home to elephants, leopards, and over 180 bird species in 226 square kilometers of pristine wilderness.</p>
+                    </div>
+                </div>
+                <div class="highlight-card">
+                    <img src="https://images.unsplash.com/photo-1730021155304-9ff1f0f33b29" alt="Baidyanath Dham">
+                    <div class="card-content">
+                        <h3>Baidyanath Dham</h3>
+                        <p>One of the twelve sacred Jyotirlingas, this ancient temple complex attracts millions of devotees during the holy month of Shravan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Features Section -->
+    <section class="interactive-section" id="plan-trip">
+        <div class="container">
+            <h2 class="section-title">Plan Your Journey</h2>
+            <div class="features-grid">
+                <!-- Contact Form -->
+                <div class="feature-box">
+                    <h3>Get In Touch</h3>
+                    <p>Have questions about your Jharkhand adventure? Contact our travel experts for personalized recommendations.</p>
+                    <form class="contact-form" onsubmit="handleContactForm(event)">
+                        <div class="form-group">
+                            <label for="contact-name">Full Name</label>
+                            <input type="text" id="contact-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-email">Email Address</label>
+                            <input type="email" id="contact-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-message">Message</label>
+                            <textarea id="contact-message" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Send Message</button>
+                    </form>
+                </div>
+
+                <!-- Booking Form -->
+                <div class="feature-box">
+                    <h3>Plan Your Trip</h3>
+                    <p>Tell us your preferences and we’ll tailor the perfect Jharkhand itinerary for you.</p>
+                    <form class="booking-form" onsubmit="handleBookingForm(event)">
+                        <div class="form-group">
+                            <label for="traveler-name">Full Name</label>
+                            <input type="text" id="traveler-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="booking-destination">Preferred Destination</label>
+                            <select id="booking-destination" required>
+                                <option value="">Select Destination</option>
+                                <option value="netarhat">Netarhat Hill Station</option>
+                                <option value="betla">Betla National Park</option>
+                                <option value="hundru">Hundru Falls</option>
+                                <option value="baidyanath">Baidyanath Dham</option>
+                                <option value="custom">Custom Package</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="booking-date">Travel Date</label>
+                            <input type="date" id="booking-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="trip-duration">Trip Duration (Days)</label>
+                            <select id="trip-duration" required>
+                                <option value="">Select Duration</option>
+                                <option value="1-2">1-2 Days</option>
+                                <option value="3-4">3-4 Days</option>
+                                <option value="5-7">5-7 Days</option>
+                                <option value="8+">8+ Days</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="booking-guests">Number of Guests</label>
+                            <select id="booking-guests" required>
+                                <option value="">Select Guests</option>
+                                <option value="1">1 Guest</option>
+                                <option value="2">2 Guests</option>
+                                <option value="3-5">3-5 Guests</option>
+                                <option value="6+">6+ Guests</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="booking-phone">Phone Number</label>
+                            <input type="tel" id="booking-phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="trip-interests">Interests</label>
+                            <select id="trip-interests" required>
+                                <option value="">Choose Interests</option>
+                                <option value="nature">Nature & Waterfalls</option>
+                                <option value="wildlife">Wildlife & Safari</option>
+                                <option value="spiritual">Spiritual & Temples</option>
+                                <option value="hills">Hill Stations & Views</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="submit-btn">Book Now</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Jharkhand Tourism</h3>
+                    <p>Discover the untamed beauty of Jharkhand - where forests whisper ancient stories and waterfalls sing songs of serenity.</p>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Facebook">📘</a>
+                        <a href="#" aria-label="Instagram">📷</a>
+                        <a href="#" aria-label="Twitter">🐦</a>
+                        <a href="#" aria-label="YouTube">📺</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul style="list-style: none;">
+                        <li><a href="#destinations">Popular Destinations</a></li>
+                        <li><a href="#culture">Culture & Heritage</a></li>
+                        <li><a href="#festivals">Festivals & Events</a></li>
+                        <li><a href="#plan">Travel Planning</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Travel Info</h3>
+                    <ul style="list-style: none;">
+                        <li><a href="#">Best Time to Visit</a></li>
+                        <li><a href="#">Accommodation</a></li>
+                        <li><a href="#">Transportation</a></li>
+                        <li><a href="#">Travel Guidelines</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p>📍 Tourism Department, Jharkhand</p>
+                    <p>📞 +91-651-2446378</p>
+                    <p>✉️ info@jharkhantourism.gov.in</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Jharkhand Tourism. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('nav-menu');
+
+        hamburger.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Image Slider Functionality
+        let slideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        function changeSlide(direction) {
+            slideIndex += direction;
+            if (slideIndex >= slides.length) slideIndex = 0;
+            if (slideIndex < 0) slideIndex = slides.length - 1;
+            showSlide(slideIndex);
+        }
+
+        function currentSlide(index) {
+            slideIndex = index - 1;
+            showSlide(slideIndex);
+        }
+
+        // Auto-slide functionality
+        setInterval(() => {
+            changeSlide(1);
+        }, 5000);
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Search functionality
+        let activeFilter = 'all';
+
+        function handleSearch(event) {
+            event.preventDefault();
+            const searchQuery = document.getElementById('search-input').value;
+            
+            // Simulate search results
+            let results = [];
+            const destinations = [
+                { name: 'Hundru Falls', type: 'waterfalls', description: '98-meter spectacular waterfall' },
+                { name: 'Netarhat Hill Station', type: 'hills', description: 'Queen of Chotanagpur' },
+                { name: 'Betla National Park', type: 'wildlife', description: 'Tiger reserve and wildlife sanctuary' },
+                { name: 'Baidyanath Dham', type: 'temples', description: 'Sacred Jyotirlinga temple' },
+                { name: 'Jonha Falls', type: 'waterfalls', description: 'Beautiful waterfall near Ranchi' },
+                { name: 'Parasnath Hill', type: 'hills', description: 'Highest peak in Jharkhand' },
+                { name: 'Hazaribagh Wildlife Sanctuary', type: 'wildlife', description: 'Rich biodiversity sanctuary' }
+            ];
+
+            // Filter based on active filter and search query
+            results = destinations.filter(dest => {
+                const matchesFilter = activeFilter === 'all' || dest.type === activeFilter;
+                const matchesQuery = dest.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                                   dest.description.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesFilter && (searchQuery === '' || matchesQuery);
+            });
+
+            // Display results
+            let resultText = `Found ${results.length} destinations`;
+            if (searchQuery) resultText += ` for "${searchQuery}"`;
+            if (activeFilter !== 'all') resultText += ` in ${activeFilter}`;
+            
+            resultText += ':\n\n' + results.map(dest => `• ${dest.name} - ${dest.description}`).join('\n');
+            
+            alert(resultText);
+        }
+
+        function setFilter(filter) {
+            activeFilter = filter;
+            
+            // Update active filter button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Form handling functions
+        function handleContactForm(event) {
+            event.preventDefault();
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const message = document.getElementById('contact-message').value;
+
+            // Simulate form submission
+            alert(`Thank you, ${name}! Your message has been sent successfully. We'll get back to you at ${email} within 24 hours.`);
+            
+            // Reset form
+            event.target.reset();
+        }
+
+        function handleBookingForm(event) {
+            event.preventDefault();
+            const destination = document.getElementById('booking-destination');
+            const date = document.getElementById('booking-date').value;
+            const guests = document.getElementById('booking-guests').value;
+            const phone = document.getElementById('booking-phone').value;
+
+            const destinationName = destination.options[destination.selectedIndex].text;
+
+            // Simulate booking submission
+            alert(`Booking confirmed! 
+            
+Destination: ${destinationName}
+Travel Date: ${new Date(date).toLocaleDateString()}
+Guests: ${guests}
+Contact: ${phone}
+
+Our travel coordinator will call you within 2 hours to finalize your Jharkhand adventure!`);
+            
+            // Reset form
+            event.target.reset();
+        }
+
+        // Add scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.highlight-card, .feature-box').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Add loading animation to images
+        document.querySelectorAll('img').forEach(img => {
+            img.addEventListener('load', function() {
+                this.style.opacity = '1';
+            });
+            img.style.opacity = '0';
+            img.style.transition = 'opacity 0.3s ease';
+        });
+    </script>
+</body>
+</html>

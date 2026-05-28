@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Jharkhand AR/VR StreetView — Demo</title>
+  <style>
+    html,body,#map{height:100%;margin:0;padding:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
+    #container{display:flex;flex-direction:column;height:100vh}
+    header{background:linear-gradient(90deg,#0f172a,#0b1220);color:#fff;padding:10px 16px;display:flex;align-items:center;justify-content:space-between}
+    header h1{font-size:16px;margin:0}
+    #map{flex:1;position:relative}
+    #panorama{position:absolute;top:64px;right:16px;bottom:16px;left:16px;border-radius:12px;overflow:hidden;box-shadow:0 8px 30px rgba(2,6,23,0.6);display:none}
+    .controls{position:absolute;left:20px;top:74px;background:rgba(255,255,255,0.95);padding:8px;border-radius:8px;box-shadow:0 4px 12px rgba(2,6,23,0.15)}
+    .controls button{display:block;margin:6px 0;padding:8px 10px;border-radius:8px;border:0;background:#0b69ff;color:#fff;cursor:pointer}
+    .marker-list{position:absolute;right:24px;top:74px;background:rgba(255,255,255,0.95);padding:8px;border-radius:8px;max-height:60vh;overflow:auto;box-shadow:0 4px 12px rgba(2,6,23,0.15)}
+    .marker-item{padding:6px 8px;border-radius:6px;margin:4px 0;cursor:pointer;background:#fff;border:1px solid #eee}
+    .marker-item:hover{background:#f0f7ff}
+    #vrBtn{background:#0b69ff;border:none;color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer}
+    .small{font-size:12px;color:#445}
+    /* Fullscreen styles for panorama */
+    :fullscreen #panorama{top:0;right:0;left:0;bottom:0;border-radius:0}
+  </style>
+</head>
+<body>
+  <div id="container">
+    <header>
+      <h1>Jharkhand AR/VR StreetView — Tourist Spots</h1>
+      <div>
+        <button id="vrBtn">Enter Immersive (Full‑Screen)</button>
+      </div>
+    </header>
+
+    <div id="map"></div>
+
+    <div id="panorama">
+      <!-- panorama will be injected here -->
+    </div>
+
+    <div class="controls" id="controls" style="display:none">
+      <div class="small">Panorama Controls</div>
+      <button id="backToMap">Close Panorama</button>
+      <button id="streetLinksToggle">Toggle Street Links</button>
+    </div>
+
+    <div class="marker-list" id="markerList"></div>
+  </div>
+
+  <!-- Replace YOUR_API_KEY below with your Google Maps JavaScript API key. Make sure Street View API is enabled. -->
+  <script>
+    // Tourist locations (name, position, shortDesc). Coordinates sourced from public geo-data.
+    const TOURIST_SPOTS = [
+      { name: 'Netarhat', position: {lat: 23.485434, lng: 84.264752}, desc:'Scenic hill station - "Queen of Chotanagpur"'},
+      { name: 'Betla National Park', position: {lat: 23.887625, lng: 84.197555}, desc:'Wildlife & forests'},
+      { name: 'Hundru Falls', position: {lat: 23.3441, lng: 85.309562}, desc:'Waterfall near Ranchi'},
+      { name: 'Dassam Falls', position: {lat: 23.1468, lng: 85.4671}, desc:'Scenic waterfall'},
+      { name: 'Patratu Valley', position: {lat: 23.6700, lng: 85.2800}, desc:'Road trip & viewpoints'},
+      { name: 'Baidyanath Dham (Deoghar)', position: {lat: 24.488957, lng: 86.692722}, desc:'Major pilgrimage site'},
+      { name: 'Parasnath Hills', position: {lat: 23.961203, lng: 86.132013}, desc:'Jain pilgrimage & trekking'},
+      { name: 'Jonha Falls (Gautamdhara)', position: {lat: 23.3383, lng: 85.604999}, desc:'Waterfall near Ranchi'}
+    ];
+
+    let map, panorama, svService;
+
+    function initMap() {
+      // Center on Ranchi by default
+      const ranchi = { lat: 23.3441, lng: 85.3096 };
+
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: ranchi,
+        zoom: 8,
+        streetViewControl: false,
+        mapTypeControl: false
+      });
+
+      svService = new google.maps.StreetViewService();
+
+      // Custom simple SVG marker (tourist pin)
+      const svgMarker = {
+        path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM12 11.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z',
+        fillColor: '#0b69ff',
+        fillOpacity: 1,
+        strokeWeight: 0,
+        scale: 1.5
+      };
+
+      // Add markers
+      TOURIST_SPOTS.forEach((spot, idx) => {
+        const marker = new google.maps.Marker({
+          position: spot.position,
+          map,
+          title: spot.name,
+          icon: svgMarker
+        });
+
+        marker.addListener('click', () => openPanoramaAt(spot));
+
+        // add to list UI
+        const list = document.getElementById('markerList');
+        const item = document.createElement('div');
+        item.className = 'marker-item';
+        item.innerHTML = `<strong>${spot.name}</strong><div class="small">${spot.desc}</div>`;
+        item.addEventListener('click', () => {
+          map.panTo(spot.position);
+          map.setZoom(12);
+          openPanoramaAt(spot);
+        });
+        list.appendChild(item);
+      });
+    }
+
+    // Try to load a Street View panorama at the spot. If exact pano isn't available, find nearest.
+    function openPanoramaAt(spot) {
+      const RADIUS = 2000; // meters
+      svService.getPanorama({location: spot.position, radius: RADIUS}, (data, status) => {
+        if (status === 'OK' && data && data.location) {
+          showPanorama(data.location.latLng);
+        } else {
+          // fallback: use the exact latlng via panorama with visible:false allowed
+          showPanorama(spot.position);
+        }
+      });
+    }
+
+    function showPanorama(latlng) {
+      // create panorama if not exists
+      const panoContainer = document.getElementById('panorama');
+      if (!panorama) {
+        panorama = new google.maps.StreetViewPanorama(panoContainer, {
+          position: latlng,
+          pov: {heading: 0, pitch: 0},
+          visible: true,
+          addressControl: false,
+          linksControl: true,
+          panControl: true
+        });
+      } else {
+        panorama.setPosition(latlng);
+        panorama.setVisible(true);
+      }
+
+      // show UI
+      panoContainer.style.display = 'block';
+      document.getElementById('controls').style.display = 'block';
+
+      // small safety: when panorama becomes visible, hide map interactions a bit
+      map.setOptions({draggable: false, zoomControl: false, scrollwheel: false});
+    }
+
+    // Close panorama
+    function closePanorama() {
+      if (panorama) panorama.setVisible(false);
+      document.getElementById('panorama').style.display = 'none';
+      document.getElementById('controls').style.display = 'none';
+      map.setOptions({draggable: true, zoomControl: true, scrollwheel: true});
+      // exit fullscreen if active
+      if (document.fullscreenElement) document.exitFullscreen();
+    }
+
+    // Toggle links control
+    function toggleStreetLinks() {
+      if (!panorama) return;
+      const current = panorama.get('linksControl');
+      panorama.setOptions({linksControl: !current});
+    }
+
+    // VR / Fullscreen button handler
+    function enterImmersive() {
+      const panoContainer = document.getElementById('panorama');
+      if (!panoContainer || panoContainer.style.display === 'none') {
+        // if panorama not open, open nearest to map center
+        const center = map.getCenter();
+        showPanorama(center);
+      }
+      // request fullscreen on the panorama container
+      const elem = document.getElementById('panorama');
+      if (elem.requestFullscreen) elem.requestFullscreen();
+      else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+      else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+    }
+
+    // Wire UI
+    document.addEventListener('click', (e) => {
+      if (e.target && e.target.id === 'backToMap') closePanorama();
+      if (e.target && e.target.id === 'streetLinksToggle') toggleStreetLinks();
+      if (e.target && e.target.id === 'vrBtn') enterImmersive();
+    });
+
+    // Load Google Maps script dynamically
+    function loadScript() {
+      const s = document.createElement('script');
+      s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBe1yLbBB9_7eHlNLRVErpz1v_7HWp3g7w&callback=initMap';
+      s.async = true;
+      s.defer = true;
+      document.head.appendChild(s);
+    }
+
+    loadScript();
+  </script>
+</body>
+</html>

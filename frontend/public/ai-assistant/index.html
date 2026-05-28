@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jharkhand Smart Digital Tourism Assistant</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <div id="logo-animation" class="brand-logo-animation"></div>
+      <div>
+        <h1>Jharkhand Tourism Assistant</h1>
+        <p class="tagline">Eco-friendly, culture-first travel planning for Jharkhand, India</p>
+      </div>
+    </div>
+    <div class="theme-switcher">
+      <label for="theme" class="visually-hidden">Theme</label>
+      <select id="theme">
+        <option value="forest" selected>Forest</option>
+        <option value="water">Water</option>
+        <option value="tribal">Tribal</option>
+        <option value="sunset">Sunset</option>
+      </select>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card" id="preferences-card">
+      <h2>Plan your trip</h2>
+      <form id="planner-form">
+        <div class="grid">
+          <div class="form-group">
+            <label for="language">Preferred language</label>
+            <select id="language" required>
+              <option value="en" selected>English</option>
+              <option value="hi">Hindi (हिंदी)</option>
+              <option value="nag">Nagpuri (transliterated)</option>
+              <option value="sat">Santhali (transliterated)</option>
+              <option value="kru">Kurmali (transliterated)</option>
+              <option value="ho">Ho (transliterated)</option>
+              <option value="mun">Mundari (transliterated)</option>
+              <option value="kho">Khortha (transliterated)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="duration">Trip length (days)</label>
+            <input type="number" id="duration" min="1" max="10" value="3" required />
+          </div>
+
+          <div class="form-group">
+            <label for="budget">Budget</label>
+            <select id="budget" required>
+              <option value="low">Low</option>
+              <option value="moderate" selected>Moderate</option>
+              <option value="premium">Premium</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="group">Travel group</label>
+            <select id="group" required>
+              <option value="solo">Solo</option>
+              <option value="couple">Couple</option>
+              <option value="family" selected>Family</option>
+              <option value="friends">Friends</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="startCity">Starting city (optional)</label>
+            <input type="text" id="startCity" placeholder="e.g., Ranchi" />
+          </div>
+
+          <div class="form-group">
+            <label for="pace">Pace</label>
+            <select id="pace" required>
+              <option value="relaxed">Relaxed</option>
+              <option value="balanced" selected>Balanced</option>
+              <option value="active">Active</option>
+            </select>
+          </div>
+        </div>
+
+        <fieldset class="form-group">
+          <legend>Interests</legend>
+          <div class="chips">
+            <label class="chip"><input type="checkbox" value="nature" checked /> Nature</label>
+            <label class="chip"><input type="checkbox" value="waterfalls" checked /> Waterfalls</label>
+            <label class="chip"><input type="checkbox" value="wildlife" /> Wildlife</label>
+            <label class="chip"><input type="checkbox" value="culture" checked /> Culture</label>
+            <label class="chip"><input type="checkbox" value="heritage" /> Heritage</label>
+            <label class="chip"><input type="checkbox" value="trekking" /> Trekking</label>
+            <label class="chip"><input type="checkbox" value="relaxation" /> Relaxation</label>
+          </div>
+        </fieldset>
+
+        <div class="form-group">
+          <label for="notes">Anything else? (diet, must-visit, dates)</label>
+          <textarea id="notes" rows="3" placeholder="Write preferences..." ></textarea>
+        </div>
+
+        <div class="actions">
+          <button type="submit" id="generateBtn">Generate itinerary</button>
+          <button type="button" id="clearBtn" class="secondary">Clear</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card" id="result-card">
+      <div class="result-header">
+        <h2>Your custom itinerary</h2>
+        <div class="result-actions">
+          <div class="loader" id="loader" hidden></div>
+          <button id="downloadBtn" class="download-btn" hidden>
+            📄 Download PDF
+          </button>
+          <button id="openPdfBtn" class="open-pdf-btn" hidden>
+            👁️ Open PDF
+          </button>
+        </div>
+      </div>
+      <div id="skeleton" class="skeleton" hidden>
+        <div class="skel-block skel-title"></div>
+        <div class="skel-block skel-line"></div>
+        <div class="skel-block skel-line"></div>
+        <div class="skel-block skel-line short"></div>
+        <div class="skel-block skel-title"></div>
+        <div class="skel-block skel-line"></div>
+        <div class="skel-block skel-line tiny"></div>
+      </div>
+      <div id="result" class="result"></div>
+    </section>
+
+    <section class="card" id="map-card" hidden>
+      <h2>Map & nearby</h2>
+      <div id="map" class="map"></div>
+      <div class="map-flex">
+        <div class="weather" id="weather"></div>
+        <div class="nearby" id="nearby"></div>
+      </div>
+      <small class="attribution">Map © OpenStreetMap contributors • Photos via Wikimedia Commons/Wikipedia</small>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>Designed for responsible tourism in Jharkhand • Stay kind to nature and communities</p>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

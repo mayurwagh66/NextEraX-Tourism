@@ -1,0 +1,583 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jharkhand 360° View - Mapillary</title>
+    <link rel="stylesheet" href="https://unpkg.com/mapillary-js@4.1.2/dist/mapillary.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .controls {
+            padding: 20px;
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .map-container {
+            flex: 1;
+            position: relative;
+            margin: 20px auto;
+            max-width: 1200px;
+            width: calc(100% - 40px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #mapillary {
+            width: 100%;
+            height: 100%;
+            min-height: 500px;
+            display: block;
+        }
+
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 1.2rem;
+            z-index: 1000;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid #667eea;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .info-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            max-width: 350px;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .info-panel h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .info-panel p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .map-container {
+                margin: 10px auto;
+                width: calc(100% - 20px);
+                border-radius: 15px;
+            }
+            
+            .info-panel {
+                position: fixed;
+                bottom: 10px;
+                left: 10px;
+                right: 10px;
+                max-width: none;
+                width: auto;
+                max-height: 50vh;
+            }
+            
+            .controls {
+                padding: 15px;
+            }
+            
+            .btn {
+                padding: 12px 25px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Jharkhand 360° Experience</h1>
+        <p>Explore Jharkhand through immersive 360-degree street-level imagery</p>
+    </div>
+
+        <div class="controls">
+        <button id="loadMapBtn" class="btn">Explore Jharkhand 360°</button>
+    </div>
+
+    <div class="map-container">
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <div>Loading Jharkhand 360° view...</div>
+        </div>
+        <div id="mapillary"></div>
+        
+        <div class="info-panel">
+            <h3>🗺️ Jharkhand, India</h3>
+            <p><strong>About Jharkhand:</strong> Jharkhand is a state in eastern India, known for its rich mineral resources, dense forests, and vibrant tribal culture. The state is home to several national parks and wildlife sanctuaries.</p>
+            
+            <div style="margin-top: 15px;">
+                <h4>🎮 Controls</h4>
+                <p>• Click and drag to look around in 360°<br>
+                • Mouse wheel to zoom in/out<br>
+                • Arrow keys to navigate<br>
+                • Spacebar to move forward</p>
+            </div>
+            
+            <div id="imageInfo" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd; display: none;">
+                <h4>📍 Current View</h4>
+                <p id="imageDetails">Loading location details...</p>
+            </div>
+            
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd; font-size: 0.9rem; color: #666;">
+                <h4>ℹ️ About This View</h4>
+                <p>This 360° street-level imagery is captured by the Mapillary community and shows real locations across Jharkhand. Each view represents an actual place you can visit in the state.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/mapillary-js@4.1.2/dist/mapillary.js"></script>
+    <script>
+        // Mapillary API Configuration
+        const MAPILLARY_CLIENT_ID = '25380348044901329';
+        const MAPILLARY_ACCESS_TOKEN = 'MLY|25380348044901329|68818272e655ff85bf72f11180794aad';
+        const MAPILLARY_CLIENT_SECRET = 'MLY|25380348044901329|7f1d3ab101ef5539a7bb615f38bfb490';
+        
+        // Jharkhand coordinates (center of the state)
+        const JHARKHAND_CENTER = {
+            lat: 23.6102,
+            lng: 85.2799
+        };
+        
+        // Jharkhand bounding box for API searches
+        const JHARKHAND_BBOX = {
+            minLng: 83.0,
+            minLat: 22.0,
+            maxLng: 87.5,
+            maxLat: 25.0
+        };
+        
+        let viewer = null;
+        let isLoaded = false;
+        let currentImageId = null;
+
+        // Initialize Mapillary viewer
+        function initializeMapillary() {
+            const loadingEl = document.getElementById('loading');
+            const mapContainer = document.getElementById('mapillary');
+            
+            try {
+                loadingEl.classList.remove('hidden');
+                
+                // Create Mapillary viewer without initial image
+                var {Viewer} = mapillary;
+                
+                viewer = new Viewer({
+                    accessToken: MAPILLARY_ACCESS_TOKEN,
+                    container: mapContainer,
+                    // Don't set imageId initially - we'll search for Jharkhand images
+                });
+                
+                // Now search for Jharkhand images and create viewer with the first one
+                searchImagesInJharkhand()
+                    .then((imageId) => {
+                        if (imageId) {
+                            console.log('🎯 Creating viewer with Jharkhand image:', imageId);
+                            
+                            // Clear the existing viewer and create new one with image
+                            if (viewer) {
+                                viewer.remove();
+                                viewer = null;
+                            }
+                            
+                            mapContainer.innerHTML = '';
+                            
+                            // Create new viewer with the found image
+                            var {Viewer} = mapillary;
+                            
+                            viewer = new Viewer({
+                                accessToken: MAPILLARY_ACCESS_TOKEN,
+                                container: mapContainer,
+                                imageId: imageId,
+                            });
+                            
+                            currentImageId = imageId;
+                            loadImageDetails(imageId);
+                        }
+                        loadingEl.classList.add('hidden');
+                        isLoaded = true;
+                        console.log('✅ Mapillary viewer initialized successfully');
+                    })
+                    .catch((error) => {
+                        console.error('❌ Error loading Jharkhand images:', error);
+                        loadingEl.classList.add('hidden');
+                        alert('Failed to load Jharkhand images. Please try again.');
+                    });
+
+            } catch (error) {
+                console.error('❌ Error initializing Mapillary:', error);
+                loadingEl.classList.add('hidden');
+                alert('Failed to initialize Mapillary viewer. Please check your API credentials.');
+            }
+        }
+
+        // Search for images in Jharkhand region using proper API v4
+        async function searchImagesInJharkhand() {
+            try {
+                console.log('🔍 Searching for images in Jharkhand...');
+                console.log('📍 Bounding box:', JHARKHAND_BBOX);
+                
+                // First try with OAuth header
+                const response = await fetch(`https://graph.mapillary.com/images?fields=id,thumb_256_url,thumb_1024_url,thumb_2048_url,compass_angle,geometry,is_pano,captured_at&bbox=${JHARKHAND_BBOX.minLng},${JHARKHAND_BBOX.minLat},${JHARKHAND_BBOX.maxLng},${JHARKHAND_BBOX.maxLat}&limit=50`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `OAuth ${MAPILLARY_ACCESS_TOKEN}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                console.log('📡 API Response status:', response.status);
+                
+                if (!response.ok) {
+                    if (response.status === 429) {
+                        throw new Error('Rate limit exceeded. Please try again later.');
+                    }
+                    console.warn('⚠️ OAuth header failed, trying query parameter...');
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('✅ API Response data:', data);
+                
+                if (data.data && data.data.length > 0) {
+                    console.log(`📸 Found ${data.data.length} images in Jharkhand`);
+                    
+                    // Filter for panoramic images first
+                    const panoImages = data.data.filter(img => img.is_pano === true);
+                    if (panoImages.length > 0) {
+                        console.log(`🎯 Found ${panoImages.length} panoramic images, using first one:`, panoImages[0].id);
+                        return panoImages[0].id;
+                    } else {
+                        // If no pano images, return the first available image
+                        console.log('📷 No panoramic images found, using first available:', data.data[0].id);
+                        return data.data[0].id;
+                    }
+                } else {
+                    console.warn('❌ No images found in Jharkhand region');
+                    return null;
+                }
+            } catch (error) {
+                console.error('❌ Error searching for images in Jharkhand:', error);
+                // Fallback: try with access token as query parameter
+                try {
+                    console.log('🔄 Trying fallback with query parameter...');
+                    const fallbackResponse = await fetch(`https://graph.mapillary.com/images?access_token=${MAPILLARY_ACCESS_TOKEN}&fields=id,is_pano,geometry&bbox=${JHARKHAND_BBOX.minLng},${JHARKHAND_BBOX.minLat},${JHARKHAND_BBOX.maxLng},${JHARKHAND_BBOX.maxLat}&limit=10`);
+                    
+                    console.log('📡 Fallback response status:', fallbackResponse.status);
+                    
+                    if (fallbackResponse.ok) {
+                        const fallbackData = await fallbackResponse.json();
+                        console.log('✅ Fallback data:', fallbackData);
+                        
+                        if (fallbackData.data && fallbackData.data.length > 0) {
+                            console.log('🎯 Fallback successful, found image:', fallbackData.data[0].id);
+                            return fallbackData.data[0].id;
+                        }
+                    } else {
+                        console.error('❌ Fallback also failed with status:', fallbackResponse.status);
+                    }
+                } catch (fallbackError) {
+                    console.error('❌ Fallback search also failed:', fallbackError);
+                }
+                return null;
+            }
+        }
+
+        // Get additional image details
+        async function getImageDetails(imageId) {
+            try {
+                const response = await fetch(`https://graph.mapillary.com/${imageId}?fields=id,thumb_256_url,thumb_1024_url,thumb_2048_url,compass_angle,geometry,is_pano,captured_at,creator`, {
+                    headers: {
+                        'Authorization': `OAuth ${MAPILLARY_ACCESS_TOKEN}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    return await response.json();
+                }
+            } catch (error) {
+                console.error('Error fetching image details:', error);
+            }
+            return null;
+        }
+
+        // Search for images in broader India region as fallback
+        async function searchImagesInIndia() {
+            try {
+                console.log('🔍 Searching for images in broader India region...');
+                
+                // Broader India bounding box
+                const indiaBbox = {
+                    minLng: 68.0,
+                    minLat: 6.0,
+                    maxLng: 97.0,
+                    maxLat: 37.0
+                };
+                
+                const response = await fetch(`https://graph.mapillary.com/images?access_token=${MAPILLARY_ACCESS_TOKEN}&fields=id,is_pano,geometry&bbox=${indiaBbox.minLng},${indiaBbox.minLat},${indiaBbox.maxLng},${indiaBbox.maxLat}&limit=20`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.data && data.data.length > 0) {
+                        console.log(`🌍 Found ${data.data.length} images in India`);
+                        return data.data[0].id;
+                    }
+                }
+                return null;
+            } catch (error) {
+                console.error('❌ Error searching in India:', error);
+                return null;
+            }
+        }
+
+        // Load and display image details in the info panel
+        async function loadImageDetails(imageId) {
+            const imageInfoEl = document.getElementById('imageInfo');
+            const imageDetailsEl = document.getElementById('imageDetails');
+            
+            imageInfoEl.style.display = 'block';
+            imageDetailsEl.textContent = 'Loading location details...';
+            
+            try {
+                const details = await getImageDetails(imageId);
+                if (details) {
+                    const captureDate = new Date(details.captured_at).toLocaleDateString();
+                    const creator = details.creator ? details.creator.username : 'Unknown';
+                    const isPano = details.is_pano ? '360° Panoramic View' : 'Standard Photo';
+                    
+                    let coordinates = 'N/A';
+                    let locationInfo = '';
+                    if (details.geometry && details.geometry.coordinates) {
+                        const lat = details.geometry.coordinates[1].toFixed(6);
+                        const lng = details.geometry.coordinates[0].toFixed(6);
+                        coordinates = `${lat}, ${lng}`;
+                        
+                        // Add some context about the location
+                        locationInfo = '<br><strong>📍 Location:</strong> This view is from a real location in Jharkhand, India. The coordinates show the exact spot where this 360° image was captured.';
+                    }
+                    
+                    let compassAngle = 'N/A';
+                    if (details.compass_angle) {
+                        compassAngle = details.compass_angle.toFixed(1) + '°';
+                    }
+                    
+                    imageDetailsEl.innerHTML = 
+                        '<strong>🎯 View Type:</strong> ' + isPano + '<br>' +
+                        '<strong>📅 Captured:</strong> ' + captureDate + '<br>' +
+                        '<strong>👤 Photographer:</strong> ' + creator + '<br>' +
+                        '<strong>🧭 Direction:</strong> ' + compassAngle + '<br>' +
+                        '<strong>🌐 Coordinates:</strong> ' + coordinates +
+                        locationInfo;
+                } else {
+                    imageDetailsEl.textContent = 'Unable to load location details';
+                }
+            } catch (error) {
+                console.error('Error loading image details:', error);
+                imageDetailsEl.textContent = 'Error loading location details';
+            }
+        }
+
+
+        // Event listeners
+        document.getElementById('loadMapBtn').addEventListener('click', function() {
+            if (!isLoaded) {
+                this.disabled = true;
+                this.textContent = 'Loading...';
+                initializeMapillary();
+            } else {
+                // If already loaded, refresh by creating new viewer with new Jharkhand image
+                this.disabled = true;
+                this.textContent = 'Refreshing...';
+                
+                searchImagesInJharkhand()
+                    .then((imageId) => {
+                        if (imageId) {
+                            // Clear existing viewer
+                            if (viewer) {
+                                viewer.remove();
+                                viewer = null;
+                            }
+                            
+                            const mapContainer = document.getElementById('mapillary');
+                            mapContainer.innerHTML = '';
+                            
+                            // Create new viewer with the found image
+                            var {Viewer} = mapillary;
+                            
+                            viewer = new Viewer({
+                                accessToken: MAPILLARY_ACCESS_TOKEN,
+                                container: mapContainer,
+                                imageId: imageId,
+                            });
+                            
+                            currentImageId = imageId;
+                            loadImageDetails(imageId);
+                        }
+                        this.disabled = false;
+                        this.textContent = 'Explore Jharkhand 360°';
+                    })
+                    .catch((error) => {
+                        console.error('Error refreshing:', error);
+                        this.disabled = false;
+                        this.textContent = 'Explore Jharkhand 360°';
+                    });
+            }
+        });
+
+        // Add some keyboard controls
+        document.addEventListener('keydown', function(event) {
+            if (!viewer || !isLoaded) return;
+
+            switch(event.key) {
+                case 'ArrowLeft':
+                    viewer.moveDir(mapillary.Rotation.Left);
+                    break;
+                case 'ArrowRight':
+                    viewer.moveDir(mapillary.Rotation.Right);
+                    break;
+                case 'ArrowUp':
+                    viewer.moveDir(mapillary.Rotation.Up);
+                    break;
+                case 'ArrowDown':
+                    viewer.moveDir(mapillary.Rotation.Down);
+                    break;
+                case ' ':
+                    event.preventDefault();
+                    viewer.moveDir(mapillary.Rotation.Forward);
+                    break;
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            if (viewer && isLoaded) {
+                viewer.resize();
+            }
+        });
+
+        // Add some helpful console messages
+        console.log('🗺️ Jharkhand 360° Mapillary Integration Ready!');
+        console.log('📍 Center coordinates:', JHARKHAND_CENTER);
+        console.log('📍 Bounding box:', JHARKHAND_BBOX);
+        console.log('🔑 Using Mapillary Client ID:', MAPILLARY_CLIENT_ID);
+        console.log('🌐 API Endpoint: https://graph.mapillary.com');
+        console.log('📊 Features: 360° panoramic view, real-time image search, detailed metadata');
+        
+        // Test if Mapillary is loaded correctly
+        console.log('🔍 Mapillary object:', mapillary);
+        if (mapillary && mapillary.Viewer) {
+            console.log('✅ Mapillary Viewer class available');
+        } else {
+            console.error('❌ Mapillary Viewer class not found');
+        }
+    </script>
+</body>
+</html>

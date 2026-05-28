@@ -1,0 +1,78 @@
+<html>
+  <head>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <style>
+      #infoBox {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.75);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 12px;
+        font-size: 18px;
+        max-width: 85%;
+        text-align: center;
+        display: none; /* hidden until marker is found */
+        font-family: Arial, sans-serif;
+      }
+    </style>
+  </head>
+  <body style="margin: 0; overflow: hidden;">
+    <a-scene embedded arjs>
+      
+      <!-- Betla Fort marker -->
+      <a-marker type="pattern" url="betla.patt" id="betlaMarker">
+        <a-box visible="false"></a-box>
+      </a-marker>
+
+      <!-- Netarhat marker -->
+      <a-marker type="pattern" url="netarhat.patt" id="netarhatMarker">
+        <a-box visible="false"></a-box>
+      </a-marker>
+
+      <!-- Hundru Falls marker -->
+      <a-marker type="pattern" url="hundru.patt" id="hundruMarker">
+        <a-box visible="false"></a-box>
+      </a-marker>
+
+      <!-- Deoghar marker -->
+      <a-marker type="pattern" url="deoghar.patt" id="deogharMarker">
+        <a-box visible="false"></a-box>
+      </a-marker>
+
+      <a-entity camera></a-entity>
+    </a-scene>
+
+    <!-- Info overlay -->
+    <div id="infoBox"></div>
+
+    <script>
+      const infoBox = document.querySelector("#infoBox");
+
+      // Map of marker IDs to info text
+      const markerInfo = {
+        betlaMarker: "🏰 Betla Fort – Built by the Chero Kings, symbol of tribal history and battles.",
+        netarhatMarker: "🌄 Netarhat – The 'Queen of Chotanagpur', famous for its sunrise and sunset views.",
+        hundruMarker: "💦 Hundru Falls – A majestic 98m waterfall near Ranchi, formed by Subarnarekha River.",
+        deogharMarker: "🕉️ Deoghar – A major Hindu pilgrimage site, home to Baba Baidyanath Jyotirlinga."
+      };
+
+      // Attach event listeners for all markers
+      Object.keys(markerInfo).forEach(markerId => {
+        const marker = document.querySelector("#" + markerId);
+
+        marker.addEventListener("markerFound", () => {
+          infoBox.style.display = "block";
+          infoBox.innerText = markerInfo[markerId];
+        });
+
+        marker.addEventListener("markerLost", () => {
+          infoBox.style.display = "none";
+        });
+      });
+    </script>
+  </body>
+</html>

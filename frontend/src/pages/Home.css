@@ -1,0 +1,949 @@
+/* ═══════════════════════════════════════════════════════════════
+   Jharkhand Tourism — Home Page Styles
+   Ported from page.html with all original design intact
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Reset only inside .jh-home ────────────────────────────── */
+.jh-home *,
+.jh-home *::before,
+.jh-home *::after {
+  box-sizing: border-box;
+}
+
+.jh-home {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  overflow-x: hidden;
+}
+
+/* ─── NAVBAR ────────────────────────────────────────────────── */
+.jh-navbar {
+  position: fixed;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 98%;
+  max-width: 1500px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  z-index: 9999;
+  padding: 0.5rem 2rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.jh-navbar.jh-scrolled {
+  background: rgba(2, 132, 199, 0.95);
+  padding: 0.4rem 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.jh-navbar.jh-minimized {
+  top: 0;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 0;
+  padding: 0.2rem 2rem;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.jh-navbar.jh-minimized .jh-logo {
+  font-size: 1.3rem;
+}
+
+.jh-navbar.jh-minimized .jh-nav-link {
+  font-size: 0.95rem;
+  padding: 0.3rem 0.6rem;
+}
+
+.jh-nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+}
+
+.jh-logo {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #f4f1e8;
+  letter-spacing: 0.5px;
+}
+
+.jh-nav-menu {
+  display: flex;
+  list-style: none;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+.jh-nav-link {
+  color: #f4f1e8;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  padding: 0.3rem 1.2rem;
+  border-radius: 25px;
+  font-size: 1.05rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.jh-nav-link:hover {
+  background: rgba(139, 95, 74, 0.3);
+  transform: translateY(-2px);
+  color: #f4f1e8;
+}
+
+.jh-login-btn {
+  background: linear-gradient(135deg, #0284c7, #0369a1) !important;
+  border-radius: 25px !important;
+  padding: 0.5rem 1.5rem !important;
+  margin-left: 0.5rem;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.jh-login-btn:hover {
+  background: linear-gradient(135deg, #0369a1, #9a3412) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* ─── Custom Dropdown Styles ─── */
+.jh-dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+.jh-dropdown-menu {
+  position: absolute;
+  top: 120%;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  min-width: 220px;
+  border-radius: 15px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  padding: 0.5rem 0;
+  animation: jhDropdownFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+@keyframes jhDropdownFadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.jh-dropdown-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  background: transparent;
+  border: none;
+  color: #333;
+  font-weight: 500;
+  text-decoration: none;
+  text-align: left;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.jh-dropdown-item:hover {
+  background: rgba(2, 132, 199, 0.08);
+  color: #1f2937;
+  padding-left: 1.5rem;
+}
+
+.jh-dropdown-divider {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.08);
+  margin: 0.5rem 0;
+}
+
+.jh-dropdown-header {
+  padding: 0.75rem 1.25rem;
+  background: rgba(2, 132, 199, 0.05);
+  color: #1f2937;
+}
+
+.jh-profile-btn {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 25px !important;
+  padding: 0.3rem 0.5rem 0.3rem 0.3rem !important;
+  margin-left: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.jh-profile-btn:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.jh-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f0fdf4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.5rem;
+  font-size: 1rem;
+}
+
+.jh-profile-text {
+  font-family: monospace;
+  font-size: 0.85rem;
+}
+
+/* Hamburger */
+.jh-hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+}
+
+.jh-hamburger span {
+  width: 25px;
+  height: 3px;
+  background: #f4f1e8;
+  margin: 3px 0;
+  transition: 0.3s;
+  display: block;
+  border-radius: 2px;
+}
+
+.jh-hamburger.jh-open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.jh-hamburger.jh-open span:nth-child(2) {
+  opacity: 0;
+}
+.jh-hamburger.jh-open span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* ─── HERO SECTION ──────────────────────────────────────────── */
+.jh-hero {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.jh-hero-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.jh-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(2, 132, 199, 0.4), rgba(139, 95, 74, 0.4));
+  z-index: 2;
+}
+
+.jh-hero-content {
+  color: white;
+  max-width: 800px;
+  padding: 0 2rem;
+  animation: jhFadeInUp 1s ease;
+  position: relative;
+  z-index: 3;
+}
+
+.jh-hero-content h1 {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.jh-hero-content > p {
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+/* ─── SEARCH BOX ────────────────────────────────────────────── */
+.jh-search-container {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 100%;
+  margin: 2rem auto;
+}
+
+.jh-search-title {
+  font-size: 1.5rem;
+  color: #1f2937;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.jh-search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.jh-search-input-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.jh-search-input {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 25px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease;
+  color: #333;
+}
+
+.jh-search-input:focus {
+  border-color: #d97706;
+}
+
+.jh-search-btn {
+  background: linear-gradient(135deg, #d97706, #b45309);
+  color: white;
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(139, 95, 74, 0.3);
+}
+
+.jh-search-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(139, 95, 74, 0.4);
+}
+
+.jh-search-filters {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.jh-filter-btn {
+  background: rgba(2, 132, 199, 0.1);
+  color: #1f2937;
+  padding: 0.5rem 1rem;
+  border: 1px solid #0284c7;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.jh-filter-btn:hover,
+.jh-filter-btn.active {
+  background: #0284c7;
+  color: white;
+}
+
+/* Search Results */
+.jh-search-results {
+  margin-top: 1rem;
+  text-align: left;
+  background: #f0fdf4;
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.jh-results-count {
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.jh-result-item {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e0e0e0;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.jh-result-item:last-child {
+  border-bottom: none;
+}
+
+.jh-clear-results {
+  margin-top: 0.5rem;
+  background: none;
+  border: 1px solid #d97706;
+  color: #d97706;
+  padding: 0.3rem 1rem;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+.jh-clear-results:hover {
+  background: #d97706;
+  color: white;
+}
+
+/* ─── IMAGE SLIDER ──────────────────────────────────────────── */
+.jh-slider-section {
+  padding: 5rem 0;
+  background: #f0fdf4;
+}
+
+.jh-slider-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 0 2rem;
+}
+
+.jh-section-title {
+  font-size: 2.5rem;
+  color: #1f2937;
+  margin-bottom: 3rem;
+  font-weight: 600;
+}
+
+.jh-image-slider {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.jh-slide {
+  display: none;
+  position: relative;
+}
+
+.jh-slide.active {
+  display: block;
+  animation: jhFadeIn 0.6s ease;
+}
+
+.jh-slide img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+}
+
+.jh-slide-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  color: white;
+  padding: 2rem;
+  text-align: left;
+}
+
+.jh-slide-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.jh-nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(2, 132, 199, 0.8);
+  color: white;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.jh-nav-arrow:hover {
+  background: rgba(2, 132, 199, 1);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.jh-prev {
+  left: 20px;
+}
+
+.jh-next {
+  right: 20px;
+}
+
+.jh-slider-dots {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.jh-dot {
+  height: 12px;
+  width: 12px;
+  margin: 0 5px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.jh-dot.active,
+.jh-dot:hover {
+  background-color: #1f2937;
+  transform: scale(1.2);
+}
+
+/* ─── INTRO SECTION ─────────────────────────────────────────── */
+.jh-intro-section {
+  padding: 5rem 0;
+  background: white;
+}
+
+.jh-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.jh-intro-content {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.jh-intro-content h2 {
+  font-size: 2.5rem;
+  color: #1f2937;
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+
+.jh-intro-content p {
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.8;
+}
+
+/* ─── HIGHLIGHTS (Destination Cards) ────────────────────────── */
+.jh-highlights-section {
+  padding: 5rem 0;
+  background: #f0fdf4;
+}
+
+.jh-highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.jh-highlight-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.jh-highlight-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.jh-highlight-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.jh-highlight-card:hover img {
+  transform: scale(1.05);
+}
+
+.jh-card-content {
+  padding: 1.5rem;
+}
+
+.jh-card-content h3 {
+  color: #1f2937;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.jh-card-content p {
+  color: #666;
+  line-height: 1.6;
+}
+
+/* ─── INTERACTIVE SECTION (Forms) ───────────────────────────── */
+.jh-interactive-section {
+  padding: 5rem 0;
+  background: white;
+}
+
+.jh-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 3rem;
+  margin-top: 3rem;
+}
+
+.jh-feature-box {
+  background: #f0fdf4;
+  padding: 2rem;
+  border-radius: 15px;
+  border-left: 5px solid #d97706;
+}
+
+.jh-feature-box h3 {
+  color: #1f2937;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+.jh-feature-box > p {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.jh-contact-form,
+.jh-booking-form {
+  background: linear-gradient(145deg, #ffffff, #f8f6f0);
+  padding: 1.8rem;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(2, 132, 199, 0.08);
+  margin-top: 1rem;
+  border: 1px solid rgba(2, 132, 199, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.jh-booking-form::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, #0284c7, #8b5f4a);
+}
+
+.jh-form-group {
+  margin-bottom: 1rem;
+}
+
+.jh-form-group label {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: #1f2937;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.jh-form-group input,
+.jh-form-group textarea,
+.jh-form-group select {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border: 2px solid transparent;
+  background: #f0ece1;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+  color: #333;
+}
+
+.jh-form-group input:focus,
+.jh-form-group textarea:focus,
+.jh-form-group select:focus {
+  outline: none;
+  background: white;
+  border-color: #1f2937;
+  box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.1);
+}
+
+.jh-submit-btn {
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: white;
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+  width: 100%;
+  margin-top: 5px;
+  box-shadow: 0 5px 15px rgba(2, 132, 199, 0.2);
+}
+
+.jh-submit-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(2, 132, 199, 0.4);
+}
+
+/* Form Grid Layouts */
+.jh-contact-form,
+.jh-booking-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 1.5rem;
+}
+
+/* Full width elements in Contact Form */
+.jh-contact-form .jh-form-group:nth-of-type(3),
+.jh-contact-form .jh-submit-btn {
+  grid-column: 1 / -1;
+}
+
+/* Full width elements in Booking Form */
+.jh-booking-form .jh-form-group:nth-of-type(7),
+.jh-booking-form .jh-submit-btn {
+  grid-column: 1 / -1;
+}
+
+/* On smaller screens, revert to single column */
+@media (max-width: 768px) {
+  .jh-contact-form,
+  .jh-booking-form {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── FOOTER ────────────────────────────────────────────────── */
+.jh-footer {
+  background: #0284c7;
+  color: white;
+  padding: 3rem 0 1rem;
+}
+
+.jh-footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.jh-footer-section h3 {
+  margin-bottom: 1rem;
+  color: #f4f1e8;
+}
+
+.jh-footer-section p {
+  color: #ccc;
+}
+
+.jh-footer-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.jh-footer-section ul li {
+  margin-bottom: 0.5rem;
+}
+
+.jh-footer-link {
+  color: #ccc;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+}
+
+.jh-footer-link:hover {
+  color: #f4f1e8;
+}
+
+.jh-social-icons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.jh-social-icons a {
+  width: 40px;
+  height: 40px;
+  background: #d97706;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+.jh-social-icons a:hover {
+  background: #b45309;
+  transform: translateY(-2px);
+}
+
+.jh-footer-bottom {
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+  color: #000000;
+}
+
+.jh-footer-bottom a {
+  color: #111111;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.jh-footer-bottom a:hover {
+  color: #000000;
+  text-decoration: underline;
+}
+
+/* ─── ANIMATIONS ────────────────────────────────────────────── */
+@keyframes jhFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes jhFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Scroll-reveal */
+.jh-animate {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.jh-animate.jh-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── RESPONSIVE ────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .jh-hamburger {
+    display: flex;
+  }
+
+  .jh-nav-menu {
+    position: fixed;
+    left: -100%;
+    top: 60px;
+    flex-direction: column;
+    background-color: rgba(2, 132, 199, 0.98);
+    width: 100%;
+    text-align: center;
+    transition: 0.3s;
+    padding: 2rem 0;
+    gap: 0.5rem;
+  }
+
+  .jh-nav-menu.jh-active {
+    left: 0;
+  }
+
+  .jh-hero-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .jh-hero-content > p {
+    font-size: 1.1rem;
+  }
+
+  .jh-section-title {
+    font-size: 2rem;
+  }
+
+  .jh-nav-arrow {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .jh-features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .jh-search-container {
+    margin: 2rem 1rem;
+    padding: 1.5rem;
+  }
+
+  .jh-search-input-group {
+    flex-direction: column;
+  }
+
+  .jh-search-input {
+    margin-bottom: 0.5rem;
+  }
+
+  .jh-search-filters {
+    justify-content: center;
+  }
+
+  .jh-login-btn {
+    margin-left: 0 !important;
+    margin-top: 0.5rem;
+  }
+}

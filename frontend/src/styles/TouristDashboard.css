@@ -1,0 +1,106 @@
+.tourist-dashboard {
+  padding-top: 20px;
+}
+
+.tourist-dashboard h2 {
+  color: #4c6ef5;
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+
+.dashboard-cards .card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  background: linear-gradient(145deg, #ffffff, #f0f0f0);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.dashboard-cards .card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-cards .card-body {
+  padding: 25px;
+}
+
+.dashboard-cards .card-icon {
+  color: #4c6ef5;
+  margin-bottom: 15px;
+  transition: color 0.3s ease-in-out;
+}
+
+.dashboard-cards .card:hover .card-icon {
+  color: #3b5bdb;
+}
+
+.dashboard-cards .card-title {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.dashboard-cards .card-text {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.balance-card {
+  background: linear-gradient(45deg, #4c6ef5, #7950f2);
+  color: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.balance-card .balance-icon {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.balance-card .card-title {
+  color: white;
+  font-weight: 600;
+}
+
+.balance-card hr {
+  border-color: rgba(255, 255, 255, 0.3);
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.balance-card .balance-amount {
+  font-weight: 700;
+  margin-top: 10px;
+}
+
+.payment-history-card {
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.payment-history-card .card-title {
+  color: #4c6ef5;
+  font-weight: 700;
+}
+
+.payment-history-card hr {
+  border-color: #eee;
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+.payment-table th {
+  background-color: #f8f9fa;
+  color: #4c6ef5;
+  font-weight: 600;
+}
+
+.payment-table tbody tr:hover {
+  background-color: #f1f3f5;
+  cursor: pointer;
+}
