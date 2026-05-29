@@ -20,7 +20,7 @@
 /* ─── NAVBAR ────────────────────────────────────────────────── */
 .jh-navbar {
   position: fixed;
-  top: 15px;
+  top: 12px;
   left: 50%;
   transform: translateX(-50%);
   width: 98%;
@@ -29,18 +29,24 @@
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   z-index: 9999;
-  padding: 0.5rem 2rem;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0.35rem 1.6rem;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 50px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 45px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
 .jh-navbar.jh-scrolled {
   background: rgba(2, 132, 199, 0.95);
-  padding: 0.4rem 2rem;
+  padding: 0.35rem 1.6rem;
   border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+}
+
+.jh-navbar.jh-hidden {
+  transform: translate(-50%, -130%);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .jh-navbar.jh-minimized {
@@ -48,7 +54,7 @@
   width: 100%;
   max-width: 100%;
   border-radius: 0;
-  padding: 0.2rem 2rem;
+  padding: 0.2rem 1.5rem;
   border: none;
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
@@ -68,11 +74,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 2rem;
+  padding: 0 1.5rem;
 }
 
 .jh-logo {
-  font-size: 1.6rem;
+  font-size: 1.45rem;
   font-weight: 700;
   color: #f4f1e8;
   letter-spacing: 0.5px;
@@ -92,9 +98,9 @@
   text-decoration: none;
   font-weight: 500;
   transition: all 0.3s ease;
-  padding: 0.3rem 1.2rem;
-  border-radius: 25px;
-  font-size: 1.05rem;
+  padding: 0.25rem 0.95rem;
+  border-radius: 22px;
+  font-size: 1rem;
   background: none;
   border: none;
   cursor: pointer;

@@ -5,9 +5,11 @@ import '../pages/Home.css'; // Import the custom navbar styles
 
 const Navigation = ({ account, connectWallet, loginDemo, loginAdminDemo, loginGuideDemo, logout, isAdmin, isGuide }) => {
   const [navScrolled, setNavScrolled] = useState(false);
+  const [navHidden, setNavHidden] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const lastScrollY = useRef(0);
   
   const location = useLocation();
   const navigate = useNavigate();
@@ -15,18 +17,30 @@ const Navigation = ({ account, connectWallet, loginDemo, loginAdminDemo, loginGu
 
   // ─── Navbar scroll effect ────────────────────────────────────
   useEffect(() => {
-    // If not on home page, always show as scrolled (solid background)
+    // If not on home page, always show as scrolled and keep nav visible
     if (!isHomePage) {
       setNavScrolled(true);
+      setNavHidden(false);
       return;
     }
 
-    // If on home page, handle scroll transparency
-    const onScroll = () => setNavScrolled(window.scrollY > 20);
+    lastScrollY.current = window.scrollY;
+    const onScroll = () => {
+      const currentScrollY = window.scrollY;
+      setNavScrolled(currentScrollY > 20);
+
+      if (currentScrollY > lastScrollY.current && currentScrollY > 130) {
+        setNavHidden(true);
+      } else if (currentScrollY < lastScrollY.current) {
+        setNavHidden(false);
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
     window.addEventListener('scroll', onScroll);
-    // Initial check
     onScroll();
-    
+
     return () => window.removeEventListener('scroll', onScroll);
   }, [isHomePage]);
 
@@ -56,7 +70,7 @@ const Navigation = ({ account, connectWallet, loginDemo, loginAdminDemo, loginGu
   };
 
   return (
-    <nav className={`jh-navbar${navScrolled ? ' jh-scrolled' : ''}${!isHomePage ? ' jh-minimized' : ''}`}>
+    <nav className={`jh-navbar${navScrolled ? ' jh-scrolled' : ''}${navHidden ? ' jh-hidden' : ''}${!isHomePage ? ' jh-minimized' : ''}`}>
       <div className="jh-nav-container">
         <Link to="/" className="jh-logo" style={{ textDecoration: 'none' }}>Jharkhand Tourism</Link>
         <ul className={`jh-nav-menu${mobileMenuOpen ? ' jh-active' : ''}`}>
